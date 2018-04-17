@@ -1,0 +1,24 @@
+﻿  AppClass.cpp
+d:\school\dsa2\simplex_17-18_spring\a03 - lerp\appclass.cpp(70): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\school\dsa2\simplex_17-18_spring\a03 - lerp\appclass.cpp(80): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+d:\school\dsa2\simplex_17-18_spring\a03 - lerp\appclass.cpp(91): warning C4305: '+=': truncation from 'double' to 'float'
+d:\school\dsa2\simplex_17-18_spring\a03 - lerp\appclass.cpp(71): warning C4101: 'next': unreferenced local variable
+  A03 - LERP.vcxproj -> D:\School\DSA2\Simplex_17-18_Spring\Z_DELETE\A03 - LERP_d.exe
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic-Instanced.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\BasicColor.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\BasicColor.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Line.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Line.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Minimal.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Minimal.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\MinimalRed.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Simplex.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Simplex.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Skybox.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Skybox.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Text.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Text.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Wireframe.fs
+  17 File(s) copied

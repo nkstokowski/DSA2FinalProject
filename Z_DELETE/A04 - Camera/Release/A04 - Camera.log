@@ -1,0 +1,33 @@
+﻿  AppClass.cpp
+  AppClassControls.cpp
+  AppClassGUI.cpp
+  AppClassMain.cpp
+  Main.cpp
+  MyCamera.cpp
+  MyMesh.cpp
+  MyMeshManager.cpp
+  Generating code
+  25 of 1892 functions ( 1.3%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    28 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  A04 - Camera.vcxproj -> D:\School\DSA2\Simplex_17-18_Spring\Z_DELETE\A04 - Camera.exe
+          1 file(s) copied.
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic-Instanced.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Basic.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\BasicColor.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\BasicColor.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Line.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Line.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Minimal.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Minimal.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\MinimalRed.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Simplex.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Simplex.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Skybox.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Skybox.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Text.fs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Text.vs
+  D:\School\DSA2\Simplex_17-18_Spring\include\Simplex\Shaders\Wireframe.fs
+  17 File(s) copied

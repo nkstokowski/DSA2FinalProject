@@ -1,0 +1,33 @@
+﻿  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  AppClass.cpp
+  AppClassControls.cpp
+  AppClassGUI.cpp
+  AppClassMain.cpp
+  ControllerConfiguration.cpp
+  Main.cpp
+  MyRigidBody.cpp
+  Generating code
+  All 1562 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  OpenGalaga.vcxproj -> D:\School\DSA2\DSA2Final\Z_DELETE\OpenGalaga.exe
+          1 file(s) copied.
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Basic-Instanced.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Basic.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Basic.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\BasicColor.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\BasicColor.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Line.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Line.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Minimal.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Minimal.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\MinimalRed.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Simplex.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Simplex.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Skybox.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Skybox.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Text.fs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Text.vs
+  D:\School\DSA2\DSA2Final\include\Simplex\Shaders\Wireframe.fs
+  17 File(s) copied

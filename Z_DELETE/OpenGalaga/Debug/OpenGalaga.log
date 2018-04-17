@@ -1,0 +1,30 @@
+﻿  MyRigidBody.cpp
+  Main.cpp
+  ControllerConfiguration.cpp
+  AppClassMain.cpp
+  AppClassGUI.cpp
+  AppClassControls.cpp
+  AppClass.cpp
+  imgui_draw.cpp
+  imgui_demo.cpp
+  imgui.cpp
+  Generating Code...
+  OpenGalaga.vcxproj -> D:\School\DSA2\DSA2FinalProject\Z_DELETE\OpenGalaga_d.exe
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Basic-Instanced.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Basic.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Basic.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\BasicColor.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\BasicColor.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Line.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Line.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Minimal.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Minimal.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\MinimalRed.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Simplex.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Simplex.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Skybox.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Skybox.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Text.fs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Text.vs
+  D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Wireframe.fs
+  17 File(s) copied
