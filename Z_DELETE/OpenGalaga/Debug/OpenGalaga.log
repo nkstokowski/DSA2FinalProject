@@ -1,14 +1,4 @@
-﻿  MyRigidBody.cpp
-  Main.cpp
-  ControllerConfiguration.cpp
-  AppClassMain.cpp
-  AppClassGUI.cpp
-  AppClassControls.cpp
-  AppClass.cpp
-  imgui_draw.cpp
-  imgui_demo.cpp
-  imgui.cpp
-  Generating Code...
+﻿  AppClassControls.cpp
   OpenGalaga.vcxproj -> D:\School\DSA2\DSA2FinalProject\Z_DELETE\OpenGalaga_d.exe
   D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Basic-Instanced.vs
   D:\School\DSA2\DSA2FinalProject\include\Simplex\Shaders\Basic.fs
