@@ -1,0 +1,45 @@
+﻿  Window.cpp
+  TextureManager.cpp
+  Texture.cpp
+  Text.cpp
+  SystemSingleton.cpp
+  ShaderManager.cpp
+  ShaderCompiler.cpp
+  Shader.cpp
+  MeshManager.cpp
+  Mesh.cpp
+  MaterialManager.cpp
+  Material.cpp
+  LightManager.cpp
+  Light.cpp
+  GLSystem.cpp
+  Folder.cpp
+  FileReader.cpp
+  CameraManager.cpp
+  Camera.cpp
+  BasicXApplication.cpp
+     Creating library C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\Z_DELETE\BasicX_d.lib and object C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\Z_DELETE\BasicX_d.exp
+  Generating code
+  Finished generating code
+  BasicX.vcxproj -> C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\Z_DELETE\BasicX_d.dll
+          1 file(s) copied.
+          1 file(s) copied.
+          1 file(s) copied.
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Basic-Instanced.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Basic.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Basic.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\BasicColor.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\BasicColor.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Line.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Line.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Minimal.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Minimal.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\MinimalRed.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Simplex.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Simplex.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Skybox.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Skybox.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Text.fs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Text.vs
+  C:\Users\Noah Wil5on\Documents\RIT Work\DSA2\Final\DSA2FinalProject\include\Simplex\Shaders\Wireframe.fs
+  17 File(s) copied

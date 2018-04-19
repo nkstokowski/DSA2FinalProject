@@ -17,14 +17,18 @@ namespace Simplex
 	//Adding Application to the Simplex namespace
 class Application
 {
-	vector3 m_v3Creeper; //position of the creeper
-	Model* m_pCreeper = nullptr; //model to display
-	Model* m_pSteve = nullptr; //model to display
+	vector3 m_v3Sub; //position of the Submarine
+	Model* m_pSub = nullptr;
+	Model* m_pTorpedo = nullptr;
+	Model* m_pMine = nullptr;
 
-	quaternion m_qCreeper; //quaternion for the creeper
+	quaternion m_qSub; //quaternion for the sub
+	quaternion m_qTorpedo; //quaternion for the torpedo
+	quaternion m_qMine; //quaternion for the mine
 
-	MyRigidBody* m_pCreeperRB = nullptr; //Rigid Body of the model
-	MyRigidBody* m_pSteveRB = nullptr; //Rigid Body of the model
+	MyRigidBody* m_pSubRB = nullptr; //Rigid Body of the model
+	MyRigidBody* m_pTorpedoRB = nullptr; //Rigid Body of the model
+	MyRigidBody* m_pMineRB = nullptr; //Rigid Body of the model
 
 	String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
 private:
