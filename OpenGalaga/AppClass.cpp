@@ -13,27 +13,23 @@ void Application::InitVariables(void)
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light(0 is reserved for global light)
 
-	//submarine
-	m_pSub = new Model();
-	m_pSub->Load("Submarine\\sub.obj");
-	m_pSubRB = new MyRigidBody(m_pSub->GetVertexList());
+	m_pEntityMngr->AddEntity("Submarine\\sub.obj", "player_sub");
+	m_pEntityMngr->SetModelMatrix(glm::translate(m_v3Sub));
+	m_uPlayerId = m_pEntityMngr->GetEntityIndex("player_sub");
 
-	//mine
-	m_pMine = new Model();
-	m_pMine->Load("Submarine\\mine.obj");
-	m_pMineRB = new MyRigidBody(m_pMine->GetVertexList());
+	m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine");
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z));
 
-	//torpedo
-	m_pTorpedo = new Model();
-	m_pTorpedo->Load("Submarine\\torpedo.obj");
-	m_pTorpedoRB = new MyRigidBody(m_pTorpedo->GetVertexList());
+	m_pEntityMngr->AddEntity("Submarine\\torpedo.obj", "torpedo");
+	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(0.0f, -1.0f, 5.0f)) * glm::scale(glm::vec3(0.3f, 0.3f, 0.3f)));
+	m_uTorpedoId = m_pEntityMngr->GetEntityIndex("torpedo");
 
+
+	m_uOctantLevels = 1;
+	m_pEntityMngr->Update();
 }
 void Application::Update(void)
 {
-	static float move;
-
-	move += 0.1f;
 	//Update the system so it knows how much time has passed since the last call
 	m_pSystem->Update();
 
@@ -43,78 +39,46 @@ void Application::Update(void)
 	//Is the first person camera active?
 	CameraRotation();
 
-	//Set model matrix to the sub
-	matrix4 mSub = glm::translate(m_v3Sub) * ToMatrix4(m_qSub) * ToMatrix4(m_qArcBall);
-	m_pSub->SetModelMatrix(mSub);
-	m_pSubRB->SetModelMatrix(mSub);
-	m_pMeshMngr->AddAxisToRenderList(mSub);
+	// Move Submarine
+	matrix4 m4Sub = glm::translate(m_v3Sub) * ToMatrix4(m_qSub) * ToMatrix4(m_qArcBall);
+	m_pEntityMngr->SetModelMatrix(m4Sub, m_uPlayerId);
 
-	//Set model matrix to Mine
-	matrix4 mMine = glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
-	m_pMine->SetModelMatrix(mMine);
-	m_pMineRB->SetModelMatrix(mMine);
-	m_pMeshMngr->AddAxisToRenderList(mMine);
+	//Move Torpedo Forward
+	matrix4 m4Torpedo = m_pEntityMngr->GetModelMatrix(m_uTorpedoId);
+	m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.1f));
+	m_pEntityMngr->SetModelMatrix(m4Torpedo);
 
-	//Set model matrix to Torpedo
-	matrix4 mTorpedo = glm::translate(vector3(0.0f, -1.0f, move)) * glm::scale(glm::vec3(0.3f,0.3f,0.3f));
-	m_pTorpedo->SetModelMatrix(mTorpedo);
-	m_pTorpedoRB->SetModelMatrix(mTorpedo);
-	m_pMeshMngr->AddAxisToRenderList(mTorpedo);
+	//Update Entity Manager
+	m_pEntityMngr->Update();
 
-	bool bColliding = m_pSubRB->IsColliding(m_pMineRB);
-
-	m_pSub->AddToRenderList();
-	m_pSubRB->AddToRenderList();
-
-	m_pMine->AddToRenderList();
-	m_pMineRB->AddToRenderList();
-
-	m_pTorpedo->AddToRenderList();
-	m_pTorpedoRB->AddToRenderList();
-
-	m_pMeshMngr->Print("Colliding: ");
-	if (bColliding)
-		m_pMeshMngr->PrintLine("YES!", C_RED);
-	else {
-		m_pMeshMngr->PrintLine("no", C_YELLOW);
-	}
+	//Add objects to render list
+	m_pEntityMngr->AddEntityToRenderList(-1, true);
 }
 void Application::Display(void)
 {
 	// Clear the screen
 	ClearScreen();
-	
+
+	//display octree
+	//m_pRoot->Display();
+
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");
-	
+
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
 
 	//clear the render list
 	m_pMeshMngr->ClearRenderList();
-	
-	//draw gui
+
+	//draw gui,
 	DrawGUI();
-	
+
 	//end the current frame (internally swaps the front and back buffers)
 	m_pWindow->display();
 }
-
 void Application::Release(void)
 {
-
-	//release the model
-	SafeDelete(m_pSub);
-
-	//release the rigid body for the model
-	SafeDelete(m_pSubRB);
-
-	//release the model
-	//SafeDelete(m_pSteve);
-
-	//release the rigid body for the model
-	//SafeDelete(m_pSteveRB);
-
 	//release GUI
 	ShutdownGUI();
 }

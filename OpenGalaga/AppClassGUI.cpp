@@ -5,11 +5,16 @@ void Application::DrawGUI(void)
 {
 #pragma region Debugging Information
 	//Print info on the screen
-	uint nEmptyLines = 19;
+	uint nEmptyLines = 20;
 	for (uint i = 0; i < nEmptyLines; ++i)
 		m_pMeshMngr->PrintLine("");//Add a line on top
-								   //m_pMeshMngr->Print("						");
+	//m_pMeshMngr->Print("						");
 	m_pMeshMngr->PrintLine(m_pSystem->GetAppName(), C_YELLOW);
+	//m_pMeshMngr->Print("						");
+
+	//m_pMeshMngr->Print("						");
+	m_pMeshMngr->Print("RenderCalls: ");//Add a line on top
+	m_pMeshMngr->PrintLine(std::to_string(m_uRenderCallCount), C_YELLOW);
 
 	//m_pMeshMngr->Print("						");
 	m_pMeshMngr->Print("FPS:");
@@ -21,7 +26,8 @@ void Application::DrawGUI(void)
 
 	static ImVec4 v4Color = ImColor(255, 0, 0);
 	ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoTitleBar;
-	//About
+	//Main Window
+	if (m_bGUI_Main)
 	{
 		ImGui::SetNextWindowPos(ImVec2(1, 1), ImGuiSetCond_FirstUseEver);
 		ImGui::SetNextWindowSize(ImVec2(340, 60), ImGuiSetCond_FirstUseEver);
@@ -32,6 +38,10 @@ void Application::DrawGUI(void)
 			ImGui::TextColored(v4Color, m_sProgrammer.c_str());
 			ImGui::Text("FrameRate: %.2f [FPS] -> %.3f [ms/frame]\n",
 				ImGui::GetIO().Framerate, 1000.0f / ImGui::GetIO().Framerate);
+			ImGui::Text("Levels in Octree: %d\n", m_uOctantLevels);
+			//ImGui::Text("Octants: %d\n", m_pRoot->GetOctantCount());
+			ImGui::Text("Objects: %d\n", m_uObjects);
+			ImGui::Separator();
 			ImGui::Text("Control:\n");
 			ImGui::Text("   WASD: Movement\n");
 			ImGui::Text("	 F1: Perspective\n");
@@ -39,69 +49,13 @@ void Application::DrawGUI(void)
 			ImGui::Text("	 F3: Orthographic Y\n");
 			ImGui::Text("	 F4: Orthographic Z\n");
 			ImGui::Separator();
-			ImGui::Text("  Left: Move Creeper\n");
-			ImGui::Text(" Right: Move Creeper\n");
-			ImGui::Text("    Up: Move Creeper\n");
-			ImGui::Text("  Down: Move Creeper\n");
-			ImGui::Text(" Shift: Modify Up/Down\n");
+			ImGui::Text(" PageUp: Increment Octant display\n");
+			ImGui::Text(" PageDw: Decrement Octant display\n");
 			ImGui::Separator();
-			ImGui::TextColored(ImColor(255, 255, 0), "SAT is checked.\n");
-		}
-		ImGui::End();
-	}
-
-	//Controller Debugger
-	if (false) //if you want to enable the controller debugger window just make this true
-	{
-		ImGui::SetNextWindowPos(ImVec2(1088, 1), ImGuiSetCond_FirstUseEver);
-		ImGui::SetNextWindowSize(ImVec2(190, 641), ImGuiSetCond_FirstUseEver);
-		ImGui::SetNextWindowCollapsed(false, ImGuiSetCond_FirstUseEver);
-		String sWindowName = m_pSystem->GetAppName() + " - Controller";
-		window_flags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar;
-		ImGui::Begin(sWindowName.c_str(), (bool*)0, window_flags);
-		if (sf::Joystick::isConnected(m_uActCont))
-		{
-			sf::Joystick::Identification joyID = sf::Joystick::getIdentification(m_uActCont);
-			ImGui::Text("Control   : %s", joyID.name.toAnsiString().c_str());
-			ImGui::Text("Product ID: %d", joyID.productId);
-			ImGui::Text("Vendor ID : %d", joyID.vendorId);
-			// How many buttons does joystick #0 support?
-			unsigned int buttons = sf::Joystick::getButtonCount(m_uActCont);
-			ImGui::Text("Buttons: %d", buttons);
-			//ImGui::TextColored(v4Color, "-------------------------------------------");
-			ImGui::TextColored(v4Color, "-------------------------");
-			ImGui::Text("		Key  A: %d", m_pController[m_uActCont]->button[SimplexKey_A]);
-			ImGui::Text("		Key  B: %d", m_pController[m_uActCont]->button[SimplexKey_B]);
-			ImGui::Text("		Key  X: %d", m_pController[m_uActCont]->button[SimplexKey_X]);
-			ImGui::Text("		Key  Y: %d", m_pController[m_uActCont]->button[SimplexKey_Y]);
-			ImGui::TextColored(v4Color, "---                   ---");
-			ImGui::Text("		Select: %d", m_pController[m_uActCont]->button[SimplexKey_Select]);
-			ImGui::Text("		Start : %d", m_pController[m_uActCont]->button[SimplexKey_Start]);
-			ImGui::TextColored(v4Color, "---                   ---");
-			ImGui::Text("		Key L1: %d", m_pController[m_uActCont]->button[SimplexKey_L1]);
-			ImGui::Text("		Key R1: %d", m_pController[m_uActCont]->button[SimplexKey_R1]);
-			ImGui::TextColored(v4Color, "-                       -");
-			ImGui::Text("		Key L2: %d", m_pController[m_uActCont]->button[SimplexKey_L2]);
-			ImGui::Text("		Key R2: %d", m_pController[m_uActCont]->button[SimplexKey_R2]);
-			ImGui::TextColored(v4Color, "-                       -");
-			ImGui::Text("		Key L3: %d", m_pController[m_uActCont]->button[SimplexKey_L3]);
-			ImGui::Text("		Key R3: %d", m_pController[m_uActCont]->button[SimplexKey_R3]);
-			ImGui::TextColored(v4Color, "---                   ---");
-			ImGui::Text("		Pad   : %d", m_pController[m_uActCont]->button[SimplexKey_Pad]);
-			ImGui::Text("		Gen  0: %d", m_pController[m_uActCont]->button[SimplexKey_G0]);
-			ImGui::Text("		Gen  1: %d", m_pController[m_uActCont]->button[SimplexKey_G0]);
-			ImGui::TextColored(v4Color, "-------------------------");
-			ImGui::Text("	DPad X: %f", m_pController[m_uActCont]->axis[SimplexAxis_POVX]);
-			ImGui::Text("	DPad Y: %f", m_pController[m_uActCont]->axis[SimplexAxis_POVY]);
-			ImGui::TextColored(v4Color, "-                       -");
-			ImGui::Text("	X-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_X]);
-			ImGui::Text("	Y-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_Y]);
-			ImGui::TextColored(v4Color, "-                       -");
-			ImGui::Text("	U-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_U]);
-			ImGui::Text("	V-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_V]);
-			ImGui::TextColored(v4Color, "-                       -");
-			ImGui::Text("	L-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_L]);
-			ImGui::Text("	R-Axis: %f", m_pController[m_uActCont]->axis[SimplexAxis_R]);
+			ImGui::Text("	  -: Increment Octree subdivision\n");
+			ImGui::Text("	  +: Decrement Octree subdivision\n");
+			ImGui::Separator();
+			ImGui::TextColored(ImColor(255, 255, 0), "Octree\n");
 		}
 		ImGui::End();
 	}
