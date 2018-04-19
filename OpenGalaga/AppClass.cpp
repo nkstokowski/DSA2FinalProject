@@ -85,7 +85,7 @@ void Application::Display(void)
 	ClearScreen();
 	
 	// draw a skybox
-	m_pMeshMngr->AddSkyboxToRenderList();
+	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");
 	
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
