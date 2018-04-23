@@ -1,9 +1,25 @@
 #include "AppClass.h"
 using namespace Simplex;
+
+
+void Application::fireTorpedo() {
+	// Add torpedo and retreive unique id
+	m_pEntityMngr->AddEntity(m_sTorpedoObjLoc);
+	string id = m_pEntityMngr->GetUniqueID();
+
+	// User player matrix to set new torpedo matrix
+	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
+	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -1.0f, 5.0f)) * glm::scale(glm::vec3(0.3f, 0.3f, 0.3f)));
+
+	// Add torpedo index to torpedo list
+	m_lTorpedoList.push_back(m_pEntityMngr->GetEntityIndex(id));
+
+}
+
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Nick, Nick, and Noah";
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUp(
@@ -19,10 +35,6 @@ void Application::InitVariables(void)
 
 	m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine");
 	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z));
-
-	m_pEntityMngr->AddEntity("Submarine\\torpedo.obj", "torpedo");
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(0.0f, -1.0f, 5.0f)) * glm::scale(glm::vec3(0.3f, 0.3f, 0.3f)));
-	m_uTorpedoId = m_pEntityMngr->GetEntityIndex("torpedo");
 
 
 	m_uOctantLevels = 1;
@@ -43,10 +55,15 @@ void Application::Update(void)
 	matrix4 m4Sub = glm::translate(m_v3Sub) * ToMatrix4(m_qSub) * ToMatrix4(m_qArcBall);
 	m_pEntityMngr->SetModelMatrix(m4Sub, m_uPlayerId);
 
-	//Move Torpedo Forward
-	matrix4 m4Torpedo = m_pEntityMngr->GetModelMatrix(m_uTorpedoId);
-	m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.1f));
-	m_pEntityMngr->SetModelMatrix(m4Torpedo);
+	//Move Torpedos Forward
+	matrix4 m4Torpedo;
+	for (auto i : m_lTorpedoList) {
+		m4Torpedo = m_pEntityMngr->GetModelMatrix(i);
+		m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.5f));
+		m_pEntityMngr->SetModelMatrix(m4Torpedo, i);
+	}
+
+
 
 	//Update Entity Manager
 	m_pEntityMngr->Update();

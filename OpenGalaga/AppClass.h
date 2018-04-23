@@ -6,11 +6,17 @@ Date: 2017/06
 #define __APPLICATIONCLASS_H_
 
 #include "Definitions.h"
+#include <unordered_map>
+#include <string>
 
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
 #include "MyEntityManager.h"
+
+using std::unordered_map;
+using std::vector;
+using std::string;
 
 namespace Simplex
 {
@@ -24,8 +30,12 @@ namespace Simplex
 
 		vector3 m_v3Sub = vector3(0.0f); //position of the Submarine
 		
+		// Player stuff
 		uint m_uPlayerId = -1;
-		uint m_uTorpedoId = -1;
+
+		// Torpedo stuff
+		string m_sTorpedoObjLoc = "Submarine\\torpedo.obj";
+		vector<uint> m_lTorpedoList;
 
 		quaternion m_qSub; //quaternion for the sub
 		quaternion m_qTorpedo; //quaternion for the torpedo
@@ -36,7 +46,7 @@ namespace Simplex
 		MyRigidBody* m_pMineRB = nullptr; //Rigid Body of the model
 
 	private:
-		String m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu"; //programmer
+		String m_sProgrammer = "Nick, Nick and Noah"; //programmer
 
 		static ImGuiObject gui; //GUI object
 		bool m_bGUI_Main = true; //show Main GUI window?
@@ -74,6 +84,12 @@ namespace Simplex
 		sf::Music m_soundBGM; //background music
 
 	public:
+
+		/*
+		* Fires a single torpedo based on player location
+		*/
+		void fireTorpedo();
+
 #pragma region Constructor / Run / Destructor
 		/*
 		USAGE: Constructor
