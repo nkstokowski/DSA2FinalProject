@@ -5,14 +5,15 @@ using namespace Simplex;
 void Application::fireTorpedo() {
 	// Add torpedo and retreive unique id
 	m_pEntityMngr->AddEntity(m_sTorpedoObjLoc);
-	string id = m_pEntityMngr->GetUniqueID();
+	string s_id = m_pEntityMngr->GetUniqueID();
+	uint u_id = m_pEntityMngr->GetEntityIndex(s_id);
 
 	// User player matrix to set new torpedo matrix
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
-	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -1.0f, 5.0f)) * glm::scale(glm::vec3(0.3f, 0.3f, 0.3f)));
+	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -2.0f, 5.0f)), u_id);
 
 	// Add torpedo index to torpedo list
-	m_lTorpedoList.push_back(m_pEntityMngr->GetEntityIndex(id));
+	m_lTorpedoList.push_back(u_id);
 
 }
 

@@ -404,7 +404,8 @@ bool MyRigidBody::IsColliding(MyRigidBody* const a_pOther)
 {
 	//check if spheres are colliding
 	bool bColliding = true;
-	//bColliding = (glm::distance(GetCenterGlobal(), other->GetCenterGlobal()) < m_fRadius + other->m_fRadius);
+	float dist = glm::distance(GetCenterGlobal(), a_pOther->GetCenterGlobal());
+	bColliding = ( dist < m_fRadius + a_pOther->m_fRadius);
 	//if they are check the Axis Aligned Bounding Box
 	if (bColliding) //they are colliding with bounding sphere
 	{
