@@ -7,12 +7,13 @@ void Application::fireTorpedo() {
 	m_pEntityMngr->AddEntity(m_sTorpedoObjLoc);
 	string s_id = m_pEntityMngr->GetUniqueID();
 	uint u_id = m_pEntityMngr->GetEntityIndex(s_id);
+	m_pEntityMngr->SetName("torpedo");
 
 	// User player matrix to set new torpedo matrix
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
 
 	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -2.0f, 5.0f)), u_id);
-	m_pEntityMngr->UsePhysicsSolver();
+	//m_pEntityMngr->UsePhysicsSolver();
 
 	// Add torpedo index to torpedo list
 	m_lTorpedoList.push_back(u_id);
@@ -35,15 +36,14 @@ void Application::InitVariables(void)
 	m_pEntityMngr->AddEntity("Submarine\\sub.obj", "player_sub");
 	m_pEntityMngr->SetModelMatrix(glm::translate(m_v3Sub));
 	m_uPlayerId = m_pEntityMngr->GetEntityIndex("player_sub");
-	m_pEntityMngr->UsePhysicsSolver();
+	//m_pEntityMngr->UsePhysicsSolver();
 
 	m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine");
 	m_pEntityMngr->UsePhysicsSolver();
 	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z));
 
-
-	m_uOctantLevels = 1;
 	m_pEntityMngr->Update();
+	m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
 }
 void Application::Update(void)
 {
@@ -63,16 +63,33 @@ void Application::Update(void)
 
 	//Move Torpedos Forward
 	matrix4 m4Torpedo;
+	for (uint i = 0; i < m_lToDelete.size(); i++) {
+		m_pEntityMngr->RemoveEntity(m_lToDelete[i]);
+	}
+	m_lToDelete.clear();
+	m_lTorpedoList.clear();
+	for (uint i = 0; i < m_pEntityMngr->GetEntityCount(); i++) {
+		if (m_pEntityMngr->GetEntity(i)->GetName() == "torpedo") {
+			m_lTorpedoList.push_back(i);
+		}
+	}
+
 	for (auto i : m_lTorpedoList) {
 		m4Torpedo = m_pEntityMngr->GetModelMatrix(i);
 		m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.5f));
 		m_pEntityMngr->SetModelMatrix(m4Torpedo, i);
+		if (m_pEntityMngr->GetLifeTime(i) > 3.0f) {
+			m_lToDelete.push_back(i);
+		}
 	}
 
 
 
 	//Update Entity Manager
 	m_pEntityMngr->Update();
+	
+	SafeDelete(m_pRoot);
+	m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
 
 	//Add objects to render list
 	m_pEntityMngr->AddEntityToRenderList(-1, true);
@@ -83,7 +100,7 @@ void Application::Display(void)
 	ClearScreen();
 
 	//display octree
-	//m_pRoot->Display();
+	m_pRoot->Display();
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");

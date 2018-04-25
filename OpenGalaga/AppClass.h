@@ -11,7 +11,7 @@ Date: 2017/06
 #include "ControllerConfiguration.h"
 #include "imgui\ImGuiObject.h"
 
-#include "MyEntityManager.h"
+#include "Octree.h"
 
 using std::vector;
 using std::string;
@@ -22,9 +22,13 @@ namespace Simplex
 	class Application
 	{
 		MyEntityManager* m_pEntityMngr = nullptr; //Entity Manager
+
+		Octree* m_pRoot = nullptr;
+
 		uint m_uOctantID = -1; //Index of Octant to display
 		uint m_uObjects = 0; //Number of objects in the scene
 		uint m_uOctantLevels = 0; //Number of levels in the octree
+		uint m_uOctantIdealCount = 5; //Target number of objects in octant
 
 		vector3 m_v3Sub = vector3(0.0f); //position of the Submarine
 		
@@ -34,6 +38,7 @@ namespace Simplex
 		// Torpedo stuff
 		string m_sTorpedoObjLoc = "Submarine\\torpedo.obj";
 		vector<uint> m_lTorpedoList;
+		vector<uint> m_lToDelete;
 
 		quaternion m_qSub; //quaternion for the sub
 		quaternion m_qTorpedo; //quaternion for the torpedo
@@ -225,6 +230,8 @@ namespace Simplex
 		OUTPUT: ---
 		*/
 		void CameraRotation(float a_fSpeed = 0.005f);
+
+		float LerpDegrees(float start, float end, float amount);
 #pragma endregion
 
 #pragma region Process Events

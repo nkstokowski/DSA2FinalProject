@@ -110,7 +110,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		bFPSControl = !bFPSControl;
 		m_pCameraMngr->SetFPS(bFPSControl);
 		break;
-	case sf::Keyboard::Add:
+	/*case sf::Keyboard::Add:
 		++m_uActCont;
 		m_uActCont %= 8;
 		if (m_uControllerCount > 0)
@@ -134,6 +134,27 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 				if (m_uActCont > 7)
 					m_uActCont = 7;
 			}
+		}
+		break;*/
+	case sf::Keyboard::Add:
+		if (m_uOctantLevels < 4)
+		{
+			m_pEntityMngr->ClearDimensionSetAll();
+			++m_uOctantLevels;
+
+			SafeDelete(m_pRoot);
+			m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
+
+		}
+		break;
+	case sf::Keyboard::Subtract:
+		if (m_uOctantLevels > 0)
+		{
+			m_pEntityMngr->ClearDimensionSetAll();
+			--m_uOctantLevels;
+
+			SafeDelete(m_pRoot);
+			m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
 		}
 		break;
 	case sf::Keyboard::LShift:
@@ -412,6 +433,35 @@ void Application::CameraRotation(float a_fSpeed)
 	//m_pCameraMngr->ChangePitch(-fAngleX * 3.0f);
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
+float Simplex::Application::LerpDegrees(float start, float end, float amount)
+{
+	float difference = glm::abs(end - start);
+	if (difference > 180)
+	{
+		// We need to add on to one of the values.
+		if (end > start)
+		{
+			// We'll add it on to start...
+			start += 360;
+		}
+		else
+		{
+			// Add it on to end.
+			end += 360;
+		}
+	}
+
+	// Interpolate it.
+	float value = (start + ((end - start) * amount));
+
+	// Wrap it..
+	float rangeZero = 360;
+
+	if (value >= 0 && value <= 360)
+		return value;
+
+	return fmod(value, rangeZero);
+}
 //Keyboard
 void Application::ProcessKeyboard(void)
 {
@@ -433,32 +483,41 @@ void Application::ProcessKeyboard(void)
 	vector3 m_v3Direction = glm::normalize(
 		m_v3Sub - m_pCameraMngr->GetPosition()
 	);
+	float magnitude = glm::sqrt(glm::pow2(m_v3Direction.x) + glm::pow2(m_v3Direction.z));
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_v3Sub = m_v3Sub + glm::vec3(
+		m_v3Sub += glm::vec3(
 			m_v3Direction.x * m_fMovementSpeed * fMultiplier,
 			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
 			m_v3Direction.z * m_fMovementSpeed * fMultiplier
 		);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_v3Sub = m_v3Sub - glm::vec3(
+		m_v3Sub -= glm::vec3(
 			m_v3Direction.x * m_fMovementSpeed * fMultiplier,
 			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
 			m_v3Direction.z * m_fMovementSpeed * fMultiplier
 		);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		m_pCameraMngr->MoveSideways(-m_fMovementSpeed * fMultiplier);
+		m_v3Sub += glm::vec3(
+			(m_v3Direction.z / magnitude) * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
+			(m_v3Direction.x / -magnitude)* m_fMovementSpeed * fMultiplier
+		);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		m_pCameraMngr->MoveSideways(m_fMovementSpeed * fMultiplier);
+		m_v3Sub += glm::vec3(
+			(m_v3Direction.z / -magnitude) * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
+			(m_v3Direction.x / magnitude)* m_fMovementSpeed * fMultiplier
+		);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
 		m_pCameraMngr->MoveVertical(-m_fMovementSpeed * fMultiplier);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
-		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
+		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);*/
 #pragma endregion
 	//move the sub
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -484,7 +543,33 @@ void Application::ProcessKeyboard(void)
 	}*/
 
 	//Orient the sub
+	static float rotY = 0;
+	static float realPitch = 0;
 
+	float a_fEnd = glm::degrees(glm::atan2(m_v3Direction.x, m_v3Direction.z));
+	float a_fStart = glm::degrees(rotY);
+
+	rotY = glm::radians(LerpDegrees(a_fStart, a_fEnd, 0.1f));
+
+	a_fEnd = glm::degrees(glm::atan(glm::sqrt(
+		glm::pow2(m_v3Direction.x) + 
+		glm::pow2(m_v3Direction.z)) / m_v3Direction.y) + static_cast<float>(PI) / 2.0f);
+	if (a_fEnd > 90) {
+		a_fEnd -= 180;
+	}
+	a_fStart = glm::degrees(realPitch);
+	/*if (a_fStart > PI / 2) {
+		a_fStart -= PI;
+	}*/
+
+	realPitch = glm::radians(LerpDegrees(a_fStart, a_fEnd, 0.05f));
+
+	float pitch = realPitch;
+	if (pitch > PI / 2) {
+		pitch -= PI;
+	}
+
+	m_qSub = glm::quat(glm::rotate(glm::vec3(pitch, (rotY), 0), 1.0f, glm::vec3(0, 1, 0)));
 
 	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{

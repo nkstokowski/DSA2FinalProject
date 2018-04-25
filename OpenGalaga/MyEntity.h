@@ -16,6 +16,7 @@ namespace Simplex
 		bool m_bInMemory = false; //loaded flag
 		bool m_bSetAxis = false; //render axis flag
 		String m_sUniqueID = ""; //Unique identifier name
+		String m_sName = "";
 
 		uint m_nDimensionCount = 0; //tells how many dimensions this entity lives in
 		uint* m_DimensionArray = nullptr; //Dimensions on which this entity is located
@@ -25,12 +26,16 @@ namespace Simplex
 
 		matrix4 m_m4ToWorld = IDENTITY_M4; //Model matrix associated with this MyEntity
 		MeshManager* m_pMeshMngr = nullptr; //For rendering shapes
+		SystemSingleton* m_pSystem = nullptr; //Singleton of the system
 
 		static std::map<String, MyEntity*> m_IDMap; //a map of the unique ID's
 
 		bool m_bUsePhysicsSolver = false; //Indicates if we will use a physics solver 
 
 		MySolver* m_pSolver = nullptr; //Physics MySolver
+
+		uint uClock;
+		float lifeTime = 0;
 
 	public:
 		/*
@@ -267,6 +272,12 @@ namespace Simplex
 		OUTPUT: ---
 		*/
 		void UsePhysicsSolver(bool a_bUse = true);
+
+		float GetLifeTime();
+
+		String GetName(void);
+
+		void SetName(String a_sName);
 
 	private:
 		/*

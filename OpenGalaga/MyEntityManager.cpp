@@ -470,6 +470,10 @@ void Simplex::MyEntityManager::SetPosition(vector3 a_v3Position, uint a_uIndex)
 
 	return;
 }
+void Simplex::MyEntityManager::SetName(String a_sName)
+{
+	m_mEntityArray[m_uEntityCount - 1]->SetName(a_sName);
+}
 void Simplex::MyEntityManager::SetMass(float a_fMass, String a_sUniqueID)
 {
 	//Get the entity
@@ -516,4 +520,9 @@ void Simplex::MyEntityManager::UsePhysicsSolver(bool a_bUse, uint a_uIndex)
 		a_uIndex = m_uEntityCount - 1;
 
 	return m_mEntityArray[a_uIndex]->UsePhysicsSolver(a_bUse);
+}
+
+float Simplex::MyEntityManager::GetLifeTime(uint a_uIndex)
+{
+	return GetEntity(a_uIndex)->GetLifeTime();
 }

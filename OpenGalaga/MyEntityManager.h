@@ -279,6 +279,8 @@ namespace Simplex
 		OUTPUT: ---
 		*/
 		void SetPosition(vector3 a_v3Position, uint a_uIndex = -1);
+
+		void SetName(String a_sName);
 		/*
 		USAGE: Sets the mass of the specified entity
 		ARGUMENTS:
@@ -311,6 +313,8 @@ namespace Simplex
 		OUTPUT: ---
 		*/
 		void UsePhysicsSolver(bool a_bUse = true, uint a_uIndex = -1);
+
+		float GetLifeTime(uint a_uIndex = -1);
 	private:
 		/*
 		Usage: constructor

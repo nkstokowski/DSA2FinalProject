@@ -49,6 +49,8 @@ float Simplex::MyEntity::GetMass(void)
 void Simplex::MyEntity::Init(void)
 {
 	m_pMeshMngr = MeshManager::GetInstance();
+	m_pSystem = SystemSingleton::GetInstance();
+	uClock = m_pSystem->GenClock();
 	m_bInMemory = false;
 	m_bSetAxis = false;
 	m_pModel = nullptr;
@@ -293,6 +295,10 @@ void Simplex::MyEntity::ApplyForce(vector3 a_v3Force)
 }
 void Simplex::MyEntity::Update(void)
 {
+	if (m_sName == "torpedo") {
+		lifeTime += m_pSystem->GetDeltaTime(uClock);
+	}
+
 	if (m_bUsePhysicsSolver)
 	{
 		m_pSolver->Update();
@@ -309,4 +315,19 @@ void Simplex::MyEntity::ResolveCollision(MyEntity* a_pOther)
 void Simplex::MyEntity::UsePhysicsSolver(bool a_bUse)
 {
 	m_bUsePhysicsSolver = a_bUse;
+}
+
+float Simplex::MyEntity::GetLifeTime()
+{
+	return lifeTime;
+}
+
+String Simplex::MyEntity::GetName(void)
+{
+	return m_sName;
+}
+
+void Simplex::MyEntity::SetName(String a_sName)
+{
+	m_sName = a_sName;
 }
