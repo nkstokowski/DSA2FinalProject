@@ -40,7 +40,7 @@ void Application::ProcessMouseReleased(sf::Event a_event)
 	case sf::Mouse::Button::Left:
 		gui.m_bMousePressed[0] = false;
 		m_sound.play();
-		fireTorpedo();
+		FireTorpedo();
 		break;
 	case sf::Mouse::Button::Middle:
 		gui.m_bMousePressed[1] = false;
@@ -63,7 +63,7 @@ void Application::ProcessMouseScroll(sf::Event a_event)
 
 	if (fMultiplier)
 		fSpeed *= 2.0f;
-	m_pCameraMngr->MoveForward(-fSpeed);
+	//m_pCameraMngr->MoveForward(-fSpeed);
 }
 //Keyboard
 void Application::ProcessKeyPressed(sf::Event a_event)
@@ -73,7 +73,7 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 	default: break;
 	case sf::Keyboard::Space:
 		m_sound.play();
-		fireTorpedo();
+		FireTorpedo();
 		break;
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
@@ -138,6 +138,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			}
 		}
 		break;*/
+	case sf::Keyboard::P:
 	case sf::Keyboard::Add:
 		if (m_uOctantLevels < 4)
 		{
@@ -149,6 +150,7 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 
 		}
 		break;
+	case sf::Keyboard::O:
 	case sf::Keyboard::Subtract:
 		if (m_uOctantLevels > 0)
 		{
@@ -159,6 +161,17 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 			m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
 		}
 		break;
+
+	case sf::Keyboard::J:
+		GenMines(10);
+		break;
+	case sf::Keyboard::K:
+		GenMines(100);
+		break;
+	case sf::Keyboard::L:
+		GenMines(1000);
+		break;
+
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = false;

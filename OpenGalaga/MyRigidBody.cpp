@@ -63,6 +63,8 @@ void MyRigidBody::Release(void)
 	ClearCollidingList();
 }
 //Accessors
+String MyRigidBody::GetTag(void) { return m_sTag; }
+void MyRigidBody::SetTag(String a_sTag) { m_sTag = a_sTag; }
 bool MyRigidBody::GetVisibleBS(void) { return m_bVisibleBS; }
 void MyRigidBody::SetVisibleBS(bool a_bVisible) { m_bVisibleBS = a_bVisible; }
 bool MyRigidBody::GetVisibleOBB(void) { return m_bVisibleOBB; }
@@ -135,9 +137,11 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	m_v3ARBBSize = m_v3MaxG - m_v3MinG;
 }
 //The big 3
-MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList)
+MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList, String a_sTag)
 {
 	Init();
+	m_sTag = a_sTag;
+
 	//Count the points of the incoming list
 	uint uVertexCount = a_pointList.size();
 

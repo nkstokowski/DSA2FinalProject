@@ -2,9 +2,9 @@
 using namespace Simplex;
 
 
-void Application::fireTorpedo() {
+void Application::FireTorpedo() {
 	// Add torpedo and retreive unique id
-	m_pEntityMngr->AddEntity(m_sTorpedoObjLoc);
+	m_pEntityMngr->AddEntity(m_sTorpedoObjLoc, "NA", "Torpedo");
 	string s_id = m_pEntityMngr->GetUniqueID();
 	uint u_id = m_pEntityMngr->GetEntityIndex(s_id);
 	m_pEntityMngr->SetName("torpedo");
@@ -20,6 +20,31 @@ void Application::fireTorpedo() {
 
 }
 
+void Application::GenMines(uint amount) {
+
+	string s_id;
+	uint u_id;
+	vector3 v3Position;
+	matrix4 m4Model;
+
+	for (uint i = 0; i <= amount; i++) {
+		m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine", "Mine");
+		
+		v3Position = vector3(glm::sphericalRand(50.0f));
+
+		m4Model = glm::translate(v3Position) *  glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
+
+		m_pEntityMngr->SetModelMatrix(m4Model);
+		s_id = m_pEntityMngr->GetUniqueID();
+		u_id = m_pEntityMngr->GetEntityIndex(s_id);
+		m_pEntityMngr->SetName("mine");
+		m_lMineList.push_back(u_id);
+	}
+
+}
+
+
+
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
@@ -33,14 +58,14 @@ void Application::InitVariables(void)
 
 	m_pLightMngr->SetPosition(vector3(0.0f, 3.0f, 13.0f), 1); //set the position of first light(0 is reserved for global light)
 
-	m_pEntityMngr->AddEntity("Submarine\\sub.obj", "player_sub");
+	// Create Player
+	m_pEntityMngr->AddEntity("Submarine\\sub.obj", "player_sub", "Player");
 	m_pEntityMngr->SetModelMatrix(glm::translate(m_v3Sub));
 	m_uPlayerId = m_pEntityMngr->GetEntityIndex("player_sub");
 	//m_pEntityMngr->UsePhysicsSolver();
 
-	m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine");
-	m_pEntityMngr->UsePhysicsSolver();
-	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z));
+	// Make Some initial mines
+	GenMines(60);
 
 	m_pEntityMngr->Update();
 	m_pRoot = new Octree(m_uOctantLevels, m_uOctantIdealCount);
@@ -61,28 +86,67 @@ void Application::Update(void)
 	matrix4 m4Sub = glm::translate(m_v3Sub) * ToMatrix4(m_qSub) * ToMatrix4(m_qArcBall);
 	m_pEntityMngr->SetModelMatrix(m4Sub, m_uPlayerId);
 
-	//Move Torpedos Forward
-	matrix4 m4Torpedo;
-	for (uint i = 0; i < m_lToDelete.size(); i++) {
-		m_pEntityMngr->RemoveEntity(m_lToDelete[i]);
-	}
-	m_lToDelete.clear();
-	m_lTorpedoList.clear();
-	for (uint i = 0; i < m_pEntityMngr->GetEntityCount(); i++) {
-		if (m_pEntityMngr->GetEntity(i)->GetName() == "torpedo") {
-			m_lTorpedoList.push_back(i);
+	// Check all Mines for collision
+	MyRigidBody::PRigidBody* lCollisions;
+	uint uCollisionCount;
+	MyEntity* pEntity;
+	bool bShouldDestroy = false;
+	String sOtherTag;
+	for (auto i : m_lMineList) {
+		pEntity = m_pEntityMngr->GetEntity(i);
+		lCollisions = pEntity->GetColliderArray();
+		uCollisionCount = pEntity->GetCollidingCount();
+		bShouldDestroy = false;
+
+		for (uint i = 0; i < uCollisionCount; i++) {
+			sOtherTag = lCollisions[i]->GetTag();
+			if (sOtherTag != "Player" && sOtherTag != "Mine") {
+				bShouldDestroy = true;
+				lCollisions[i]->SetTag("Destroy");
+			}
 		}
+
+		if (bShouldDestroy) {
+			m_lToDelete.push_back(i);
+		}
+
 	}
 
+	// Update Torpedos
+	matrix4 m4Torpedo;
 	for (auto i : m_lTorpedoList) {
+
+		if (m_pEntityMngr->GetLifeTime(i) > 3.0f ||
+				m_pEntityMngr->GetRigidBody(i)->GetTag() == "Destroy") {
+			m_lToDelete.push_back(i);
+		}
+
+		//Move Torpedos Forward
 		m4Torpedo = m_pEntityMngr->GetModelMatrix(i);
 		m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.5f));
 		m_pEntityMngr->SetModelMatrix(m4Torpedo, i);
-		if (m_pEntityMngr->GetLifeTime(i) > 3.0f) {
-			m_lToDelete.push_back(i);
-		}
 	}
 
+
+	// Remove entities marked for deletion
+	for (uint i = 0; i < m_lToDelete.size(); i++) {
+		m_pEntityMngr->RemoveEntity(m_lToDelete[i]);
+	}
+
+	// Rebuild Lists
+	String s_Name;
+	m_lToDelete.clear();
+	m_lTorpedoList.clear();
+	m_lMineList.clear();
+	for (uint i = 0; i < m_pEntityMngr->GetEntityCount(); i++) {
+		s_Name = m_pEntityMngr->GetEntity(i)->GetName();
+		if (s_Name == "torpedo") {
+			m_lTorpedoList.push_back(i);
+		}
+		else if (s_Name == "mine") {
+			m_lMineList.push_back(i);
+		}
+	}
 
 
 	//Update Entity Manager

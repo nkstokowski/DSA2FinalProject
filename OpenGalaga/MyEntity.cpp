@@ -75,6 +75,7 @@ void Simplex::MyEntity::Swap(MyEntity& other)
 	std::swap(m_nDimensionCount, other.m_nDimensionCount);
 	std::swap(m_DimensionArray, other.m_DimensionArray);
 	std::swap(m_pSolver, other.m_pSolver);
+	std::swap(m_sTag, other.m_sTag);
 }
 void Simplex::MyEntity::Release(void)
 {
@@ -92,18 +93,20 @@ void Simplex::MyEntity::Release(void)
 	m_IDMap.erase(m_sUniqueID);
 }
 //The big 3
-Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID)
+Simplex::MyEntity::MyEntity(String a_sFileName, String a_sUniqueID, String a_sTag)
 {
 	Init();
 	m_pModel = new Model();
 	m_pModel->Load(a_sFileName);
+	m_sTag = a_sTag;
+
 	//if the model is loaded
 	if (m_pModel->GetName() != "")
 	{
 		GenUniqueID(a_sUniqueID);
 		m_sUniqueID = a_sUniqueID;
 		m_IDMap[a_sUniqueID] = this;
-		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList()); //generate a rigid body
+		m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList(), a_sTag); //generate a rigid body
 		m_bInMemory = true; //mark this entity as viable
 	}
 	m_pSolver = new MySolver();
@@ -113,10 +116,11 @@ Simplex::MyEntity::MyEntity(MyEntity const& other)
 	m_bInMemory = other.m_bInMemory;
 	m_pModel = other.m_pModel;
 	//generate a new rigid body we do not share the same rigid body as we do the model
-	m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList());
+	m_pRigidBody = new MyRigidBody(m_pModel->GetVertexList(), m_sTag);
 	m_m4ToWorld = other.m_m4ToWorld;
 	m_pMeshMngr = other.m_pMeshMngr;
 	m_sUniqueID = other.m_sUniqueID;
+	m_sTag = other.m_sTag;
 	m_bSetAxis = other.m_bSetAxis;
 	m_nDimensionCount = other.m_nDimensionCount;
 	m_DimensionArray = other.m_DimensionArray;
@@ -330,4 +334,14 @@ String Simplex::MyEntity::GetName(void)
 void Simplex::MyEntity::SetName(String a_sName)
 {
 	m_sName = a_sName;
+}
+
+void Simplex::MyEntity::SetTag(String a_sTag)
+{
+	m_sTag = a_sTag;
+}
+
+String Simplex::MyEntity::GetTag(void)
+{
+	return m_sTag;
 }

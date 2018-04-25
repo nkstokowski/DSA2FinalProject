@@ -43,7 +43,7 @@ namespace Simplex
 		-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 		OUTPUT: ---
 		*/
-		void AddEntity(String a_sFileName, String a_sUniqueID = "NA");
+		void AddEntity(String a_sFileName, String a_sUniqueID = "NA", String a_sTag = "NA");
 		/*
 		USAGE: Deletes the MyEntity Specified by unique ID and removes it from the list
 		ARGUMENTS: uint a_uIndex -> index of the queried entry, if < 0 asks for the last one added
@@ -281,6 +281,9 @@ namespace Simplex
 		void SetPosition(vector3 a_v3Position, uint a_uIndex = -1);
 
 		void SetName(String a_sName);
+
+		void SetTag(String a_sTag);
+
 		/*
 		USAGE: Sets the mass of the specified entity
 		ARGUMENTS:

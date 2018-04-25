@@ -32,13 +32,19 @@ namespace Simplex
 
 		vector3 m_v3Sub = vector3(0.0f); //position of the Submarine
 		
+
+		vector<uint> m_lToDelete;
+
 		// Player stuff
 		uint m_uPlayerId = -1;
 
 		// Torpedo stuff
 		string m_sTorpedoObjLoc = "Submarine\\torpedo.obj";
 		vector<uint> m_lTorpedoList;
-		vector<uint> m_lToDelete;
+
+		// Mine stuff
+		uint m_uMineCount = 0;
+		vector<uint> m_lMineList;
 
 		quaternion m_qSub; //quaternion for the sub
 		quaternion m_qTorpedo; //quaternion for the torpedo
@@ -91,7 +97,12 @@ namespace Simplex
 		/*
 		* Fires a single torpedo based on player location
 		*/
-		void fireTorpedo();
+		void FireTorpedo();
+
+		/*
+		* Generates a specified amount of mines in a sphere around the player
+		*/
+		void GenMines(uint a_uAmount);
 
 #pragma region Constructor / Run / Destructor
 		/*

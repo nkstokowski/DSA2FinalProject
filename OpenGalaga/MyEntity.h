@@ -17,6 +17,7 @@ namespace Simplex
 		bool m_bSetAxis = false; //render axis flag
 		String m_sUniqueID = ""; //Unique identifier name
 		String m_sName = "";
+		String m_sTag = "";
 
 		uint m_nDimensionCount = 0; //tells how many dimensions this entity lives in
 		uint* m_DimensionArray = nullptr; //Dimensions on which this entity is located
@@ -45,7 +46,7 @@ namespace Simplex
 		-	String a_sUniqueID -> Name wanted as identifier, if not available will generate one
 		Output: class object instance
 		*/
-		MyEntity(String a_sFileName, String a_sUniqueID = "NA");
+		MyEntity(String a_sFileName, String a_sUniqueID = "NA", String a_sTag = "NA");
 		/*
 		Usage: Copy Constructor
 		Arguments: class object to copy
@@ -278,6 +279,10 @@ namespace Simplex
 		String GetName(void);
 
 		void SetName(String a_sName);
+
+		void SetTag(String a_sTag);
+
+		String GetTag(void);
 
 	private:
 		/*

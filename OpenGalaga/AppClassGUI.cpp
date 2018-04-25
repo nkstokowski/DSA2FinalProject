@@ -52,8 +52,12 @@ void Application::DrawGUI(void)
 			ImGui::Text(" PageUp: Increment Octant display\n");
 			ImGui::Text(" PageDw: Decrement Octant display\n");
 			ImGui::Separator();
-			ImGui::Text("	  -: Increment Octree subdivision\n");
-			ImGui::Text("	  +: Decrement Octree subdivision\n");
+			ImGui::Text("- OR O: Increment Octree subdivision\n");
+			ImGui::Text("+ OR P: Decrement Octree subdivision\n");
+			ImGui::Separator();
+			ImGui::Text("	 J: Generate 10 new Mines\n");
+			ImGui::Text("	 K: Generate 100 new Mines\n");
+			ImGui::Text("	 L: Generate 1000 new Mines\n");
 			ImGui::Separator();
 			ImGui::TextColored(ImColor(255, 255, 0), "Octree\n");
 		}

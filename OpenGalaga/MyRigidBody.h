@@ -46,13 +46,15 @@ namespace Simplex
 		uint m_uCollidingCount = 0; //size of the colliding set
 		PRigidBody* m_CollidingArray = nullptr; //array of rigid bodies this one is colliding with
 
+		String m_sTag = "";
+
 	public:
 		/*
 		Usage: Constructor
 		Arguments: std::vector<vector3> a_pointList -> list of points to make the Rigid Body for
 		Output: class object instance
 		*/
-		MyRigidBody(std::vector<vector3> a_pointList);
+		MyRigidBody(std::vector<vector3> a_pointList, String a_sTag = "NA");
 		/*
 		Usage: Copy Constructor
 		Arguments: class object to copy
@@ -113,6 +115,11 @@ namespace Simplex
 		*/
 		bool IsColliding(MyRigidBody* const other);
 #pragma region Accessors
+
+		String GetTag(void);
+
+		void SetTag(String a_sTag);
+
 		/*
 		Usage: Gets visibility of bounding sphere
 		Arguments: ---

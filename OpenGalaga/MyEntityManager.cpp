@@ -188,10 +188,10 @@ void Simplex::MyEntityManager::Update(void)
 		m_mEntityArray[i]->Update();
 	}
 }
-void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
+void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID, String a_sTag)
 {
 	//Create a temporal entity to store the object
-	MyEntity* pTemp = new MyEntity(a_sFileName, a_sUniqueID);
+	MyEntity* pTemp = new MyEntity(a_sFileName, a_sUniqueID, a_sTag);
 	//if I was able to generate it add it to the list
 	if (pTemp->IsInitialized())
 	{
@@ -473,6 +473,10 @@ void Simplex::MyEntityManager::SetPosition(vector3 a_v3Position, uint a_uIndex)
 void Simplex::MyEntityManager::SetName(String a_sName)
 {
 	m_mEntityArray[m_uEntityCount - 1]->SetName(a_sName);
+}
+void Simplex::MyEntityManager::SetTag(String a_sTag)
+{
+	m_mEntityArray[m_uEntityCount - 1]->SetTag(a_sTag);
 }
 void Simplex::MyEntityManager::SetMass(float a_fMass, String a_sUniqueID)
 {
