@@ -19,7 +19,7 @@ void Simplex::MyEntityManager::Release(void)
 }
 Simplex::MyEntityManager* Simplex::MyEntityManager::GetInstance()
 {
-	if(m_pInstance == nullptr)
+	if (m_pInstance == nullptr)
 	{
 		m_pInstance = new MyEntityManager();
 	}
@@ -27,7 +27,7 @@ Simplex::MyEntityManager* Simplex::MyEntityManager::GetInstance()
 }
 void Simplex::MyEntityManager::ReleaseInstance()
 {
-	if(m_pInstance != nullptr)
+	if (m_pInstance != nullptr)
 	{
 		delete m_pInstance;
 		m_pInstance = nullptr;
@@ -45,7 +45,7 @@ int Simplex::MyEntityManager::GetEntityIndex(String a_sUniqueID)
 	return -1;
 }
 //Accessors
-Simplex::uint Simplex::MyEntityManager::GetEntityCount(void) {	return m_uEntityCount; }
+Simplex::uint Simplex::MyEntityManager::GetEntityCount(void) { return m_uEntityCount; }
 Simplex::Model* Simplex::MyEntityManager::GetModel(uint a_uIndex)
 {
 	//if the list is empty return
@@ -160,10 +160,10 @@ void Simplex::MyEntityManager::SetModelMatrix(matrix4 a_m4ToWorld, uint a_uIndex
 	m_mEntityArray[a_uIndex]->SetModelMatrix(a_m4ToWorld);
 }
 //The big 3
-Simplex::MyEntityManager::MyEntityManager(){Init();}
-Simplex::MyEntityManager::MyEntityManager(MyEntityManager const& a_pOther){ }
+Simplex::MyEntityManager::MyEntityManager() { Init(); }
+Simplex::MyEntityManager::MyEntityManager(MyEntityManager const& a_pOther) { }
 Simplex::MyEntityManager& Simplex::MyEntityManager::operator=(MyEntityManager const& a_pOther) { return *this; }
-Simplex::MyEntityManager::~MyEntityManager(){Release();};
+Simplex::MyEntityManager::~MyEntityManager() { Release(); };
 // other methods
 void Simplex::MyEntityManager::Update(void)
 {
@@ -174,12 +174,18 @@ void Simplex::MyEntityManager::Update(void)
 	}
 
 	//check collisions
-	for (uint i = 0; i < m_uEntityCount - 1; i++)
+	for (uint i = 0; i < m_uEntityCount; i++)
 	{
 		for (uint j = i + 1; j < m_uEntityCount; j++)
 		{
-			m_mEntityArray[i]->IsColliding(m_mEntityArray[j]);
+			//if objects are colliding resolve the collision
+			if (m_mEntityArray[i]->IsColliding(m_mEntityArray[j]))
+			{
+				m_mEntityArray[i]->ResolveCollision(m_mEntityArray[j]);
+			}
 		}
+		//Update each entity
+		m_mEntityArray[i]->Update();
 	}
 }
 void Simplex::MyEntityManager::AddEntity(String a_sFileName, String a_sUniqueID)
@@ -225,7 +231,7 @@ void Simplex::MyEntityManager::RemoveEntity(uint a_uIndex)
 	{
 		std::swap(m_mEntityArray[a_uIndex], m_mEntityArray[m_uEntityCount - 1]);
 	}
-	
+
 	//and then pop the last one
 	//create a new temp array with one less entry
 	PEntity* tempArray = new PEntity[m_uEntityCount - 1];
@@ -417,4 +423,97 @@ bool Simplex::MyEntityManager::SharesDimension(String a_sUniqueID, MyEntity* con
 		return pTemp->SharesDimension(a_pOther);
 	}
 	return false;
+}
+void Simplex::MyEntityManager::ApplyForce(vector3 a_v3Force, String a_sUniqueID)
+{
+	//Get the entity
+	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
+	//if the entity does not exists return
+	if (pTemp)
+		pTemp->ApplyForce(a_v3Force);
+	return;
+}
+void Simplex::MyEntityManager::ApplyForce(vector3 a_v3Force, uint a_uIndex)
+{
+	//if the list is empty return
+	if (m_uEntityCount == 0)
+		return;
+
+	//if the index is larger than the number of entries we are asking for the last one
+	if (a_uIndex >= m_uEntityCount)
+		a_uIndex = m_uEntityCount - 1;
+
+	return m_mEntityArray[a_uIndex]->ApplyForce(a_v3Force);
+}
+void Simplex::MyEntityManager::SetPosition(vector3 a_v3Position, String a_sUniqueID)
+{
+	//Get the entity
+	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
+	//if the entity does not exists return
+	if (pTemp)
+	{
+		pTemp->SetPosition(a_v3Position);
+	}
+	return;
+}
+void Simplex::MyEntityManager::SetPosition(vector3 a_v3Position, uint a_uIndex)
+{
+	//if the list is empty return
+	if (m_uEntityCount == 0)
+		return;
+
+	//if the index is larger than the number of entries we are asking for the last one
+	if (a_uIndex >= m_uEntityCount)
+		a_uIndex = m_uEntityCount - 1;
+
+	m_mEntityArray[a_uIndex]->SetPosition(a_v3Position);
+
+	return;
+}
+void Simplex::MyEntityManager::SetMass(float a_fMass, String a_sUniqueID)
+{
+	//Get the entity
+	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
+	//if the entity does not exists return
+	if (pTemp)
+	{
+		pTemp->SetMass(a_fMass);
+	}
+	return;
+}
+void Simplex::MyEntityManager::SetMass(float a_fMass, uint a_uIndex)
+{
+	//if the list is empty return
+	if (m_uEntityCount == 0)
+		return;
+
+	//if the index is larger than the number of entries we are asking for the last one
+	if (a_uIndex >= m_uEntityCount)
+		a_uIndex = m_uEntityCount - 1;
+
+	m_mEntityArray[a_uIndex]->SetMass(a_fMass);
+
+	return;
+}
+void Simplex::MyEntityManager::UsePhysicsSolver(bool a_bUse, String a_sUniqueID)
+{
+	//Get the entity
+	MyEntity* pTemp = MyEntity::GetEntity(a_sUniqueID);
+
+	//if the entity does not exists return
+	if (pTemp)
+		pTemp->UsePhysicsSolver(a_bUse);
+	return;
+}
+void Simplex::MyEntityManager::UsePhysicsSolver(bool a_bUse, uint a_uIndex)
+{
+	//if the list is empty return
+	if (m_uEntityCount == 0)
+		return;
+
+	//if the index is larger than the number of entries we are asking for the last one
+	if (a_uIndex >= m_uEntityCount)
+		a_uIndex = m_uEntityCount - 1;
+
+	return m_mEntityArray[a_uIndex]->UsePhysicsSolver(a_bUse);
 }

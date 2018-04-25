@@ -12,6 +12,7 @@ void Application::fireTorpedo() {
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
 
 	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -2.0f, 5.0f)), u_id);
+	m_pEntityMngr->UsePhysicsSolver();
 
 	// Add torpedo index to torpedo list
 	m_lTorpedoList.push_back(u_id);
@@ -34,8 +35,10 @@ void Application::InitVariables(void)
 	m_pEntityMngr->AddEntity("Submarine\\sub.obj", "player_sub");
 	m_pEntityMngr->SetModelMatrix(glm::translate(m_v3Sub));
 	m_uPlayerId = m_pEntityMngr->GetEntityIndex("player_sub");
+	m_pEntityMngr->UsePhysicsSolver();
 
 	m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine");
+	m_pEntityMngr->UsePhysicsSolver();
 	m_pEntityMngr->SetModelMatrix(glm::translate(vector3(4.25f, 0.0f, 0.0f)) * glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z));
 
 

@@ -6,7 +6,6 @@ Date: 2017/06
 #define __APPLICATIONCLASS_H_
 
 #include "Definitions.h"
-#include <unordered_map>
 #include <string>
 
 #include "ControllerConfiguration.h"
@@ -14,7 +13,6 @@ Date: 2017/06
 
 #include "MyEntityManager.h"
 
-using std::unordered_map;
 using std::vector;
 using std::string;
 

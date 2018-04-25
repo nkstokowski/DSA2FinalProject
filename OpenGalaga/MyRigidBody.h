@@ -14,8 +14,11 @@ namespace Simplex
 	//System Class
 	class MyRigidBody
 	{
-		typedef MyRigidBody* PRigidBody; //Entity Pointer
-		MeshManager* m_pMeshMngr = nullptr; //for displaying the Rigid Body
+	public:
+		typedef MyRigidBody* PRigidBody; //MyEntity Pointer
+
+	protected:
+		MeshManager * m_pMeshMngr = nullptr; //for displaying the Rigid Body
 
 		bool m_bVisibleBS = false; //Visibility of bounding sphere
 		bool m_bVisibleOBB = true; //Visibility of Oriented bounding box
@@ -40,7 +43,7 @@ namespace Simplex
 
 		matrix4 m_m4ToWorld = IDENTITY_M4; //Matrix that will take us from local to world coordinate
 
-		uint m_nCollidingCount = 0; //size of the colliding set
+		uint m_uCollidingCount = 0; //size of the colliding set
 		PRigidBody* m_CollidingArray = nullptr; //array of rigid bodies this one is colliding with
 
 	public:
@@ -230,6 +233,18 @@ namespace Simplex
 		Output: ---
 		*/
 		void SetModelMatrix(matrix4 a_m4ModelMatrix);
+		/*
+		USAGE: Gets the array of rigid bodies pointer this one is colliding with
+		ARGUMENTS: ---
+		OUTPUT: list of colliding rigid bodies
+		*/
+		PRigidBody* GetColliderArray(void);
+		/*
+		USAGE: Returns the number of objects colliding with this one
+		ARGUMENTS: ---
+		OUTPUT: colliding count
+		*/
+		uint GetCollidingCount(void);
 #pragma endregion
 		/*
 		USAGE: Checks if the input is in the colliding array
