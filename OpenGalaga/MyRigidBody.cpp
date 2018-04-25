@@ -5,7 +5,7 @@ void MyRigidBody::Init(void)
 {
 	m_pMeshMngr = MeshManager::GetInstance();
 	m_bVisibleBS = false;
-	m_bVisibleOBB = true;
+	m_bVisibleOBB = false;
 	m_bVisibleARBB = false;
 
 	m_fRadius = 0.0f;

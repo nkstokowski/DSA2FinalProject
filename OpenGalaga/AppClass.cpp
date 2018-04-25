@@ -12,7 +12,7 @@ void Application::FireTorpedo() {
 	// User player matrix to set new torpedo matrix
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
 
-	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -2.0f, 5.0f)), u_id);
+	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, 0.0f, 5.0f)), u_id);
 	//m_pEntityMngr->UsePhysicsSolver();
 
 	// Add torpedo index to torpedo list
@@ -31,6 +31,7 @@ void Application::GenMines(uint amount) {
 		m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine", "Mine");
 		
 		v3Position = vector3(glm::sphericalRand(50.0f));
+		v3Position.y += 50.0f;
 
 		m4Model = glm::translate(v3Position) *  glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
 
@@ -43,12 +44,62 @@ void Application::GenMines(uint amount) {
 
 }
 
+void Simplex::Application::ExplodeMine(uint a_uMineIndex)
+{
+	MyEntity* pEntity = m_pEntityMngr->GetEntity(a_uMineIndex);
+	pEntity->SetTag("Destroy");
+	float x, y, z, deg;
+	matrix4 m4Model = pEntity->GetModelMatrix();
+	string s_id;
+	uint u_id;
+	
+	uint uShrapnelCount = rand() % (m_uMaxShrapnel - m_uMinShrapnel) + m_uMinShrapnel;
+	String sModelBase = "Submarine\\shrap_0";
+	String sModelEnd = ".obj";
+	String sModelFull;
+
+	for (uint i = 0; i < uShrapnelCount; i++) {
+		x = rand() % 360;
+		y = rand() % 360;
+		z = rand() % 360;
+		deg = rand() % 360;
+
+		// Spawn shrapnel and set matrix
+		sModelFull = sModelBase + std::to_string(i % 3) + sModelEnd;
+		m4Model *= glm::rotate(IDENTITY_M4, deg, vector3(x, y, z));
+		m_pEntityMngr->AddEntity(sModelFull, "shrapnel", "Shrapnel");
+		m_pEntityMngr->SetModelMatrix(m4Model);
+		m_pEntityMngr->UsePhysicsSolver();
+
+		// Add to list
+		s_id = m_pEntityMngr->GetUniqueID();
+		u_id = m_pEntityMngr->GetEntityIndex(s_id);
+		m_lShrapnelList.push_back(u_id);
+
+		// Apply explosion force
+		x = rand() % 360;
+		y = rand() % 360;
+		z = rand() % 360;
+		m_pEntityMngr->ApplyForce(vector3(x, y, z));
+	}
+}
+
+void Simplex::Application::ExplodeAllMines(void)
+{
+	for (auto i : m_lMineList) {
+		ExplodeMine(i);
+	}
+}
+
 
 
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
 	m_sProgrammer = "Nick, Nick, and Noah";
+
+	// Seed random
+	srand(time(NULL));
 
 	//Set the position and target of the camera
 	m_pCameraMngr->SetPositionTargetAndUp(
@@ -94,18 +145,25 @@ void Application::Update(void)
 	String sOtherTag;
 	for (auto i : m_lMineList) {
 		pEntity = m_pEntityMngr->GetEntity(i);
-		lCollisions = pEntity->GetColliderArray();
-		uCollisionCount = pEntity->GetCollidingCount();
-		bShouldDestroy = false;
+		// Ensure this mine has not already been marked for destruction
+		bShouldDestroy = (pEntity->GetTag() == "Destroy");
+		
+		// If not, double check using collisions
+		if (!bShouldDestroy) {
+			lCollisions = pEntity->GetColliderArray();
+			uCollisionCount = pEntity->GetCollidingCount();
 
-		for (uint i = 0; i < uCollisionCount; i++) {
-			sOtherTag = lCollisions[i]->GetTag();
-			if (sOtherTag != "Player" && sOtherTag != "Mine") {
-				bShouldDestroy = true;
-				lCollisions[i]->SetTag("Destroy");
+			for (uint x = 0; x < uCollisionCount; x++) {
+				sOtherTag = lCollisions[x]->GetTag();
+				if (sOtherTag != "Player" && sOtherTag != "Mine") {
+					bShouldDestroy = true;
+					ExplodeMine(i);
+					lCollisions[x]->SetTag("Destroy");
+				}
 			}
 		}
 
+		// Finally, Destroy if needed
 		if (bShouldDestroy) {
 			m_lToDelete.push_back(i);
 		}
@@ -116,15 +174,25 @@ void Application::Update(void)
 	matrix4 m4Torpedo;
 	for (auto i : m_lTorpedoList) {
 
-		if (m_pEntityMngr->GetLifeTime(i) > 3.0f ||
+		// Mark all 
+		if (m_pEntityMngr->GetLifeTime(i) > m_uTorpedoLife ||
 				m_pEntityMngr->GetRigidBody(i)->GetTag() == "Destroy") {
 			m_lToDelete.push_back(i);
 		}
+		else {
+			//Move Torpedos Forward
+			m4Torpedo = m_pEntityMngr->GetModelMatrix(i);
+			m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.5f));
+			m_pEntityMngr->SetModelMatrix(m4Torpedo, i);
+		}
+	}
 
-		//Move Torpedos Forward
-		m4Torpedo = m_pEntityMngr->GetModelMatrix(i);
-		m4Torpedo *= glm::translate(IDENTITY_M4, vector3(0.0f, 0.0f, 0.5f));
-		m_pEntityMngr->SetModelMatrix(m4Torpedo, i);
+	// Destroy Expired Shrapnel
+	for (auto i : m_lShrapnelList) {
+		if (m_pEntityMngr->GetLifeTime(i) > m_uShrapnelLife ||
+			m_pEntityMngr->GetRigidBody(i)->GetTag() == "Destroy") {
+			m_lToDelete.push_back(i);
+		}
 	}
 
 
@@ -138,6 +206,7 @@ void Application::Update(void)
 	m_lToDelete.clear();
 	m_lTorpedoList.clear();
 	m_lMineList.clear();
+	m_lShrapnelList.clear();
 	for (uint i = 0; i < m_pEntityMngr->GetEntityCount(); i++) {
 		s_Name = m_pEntityMngr->GetEntity(i)->GetName();
 		if (s_Name == "torpedo") {
@@ -145,6 +214,9 @@ void Application::Update(void)
 		}
 		else if (s_Name == "mine") {
 			m_lMineList.push_back(i);
+		}
+		else if (s_Name == "shrapnel") {
+			m_lShrapnelList.push_back(i);
 		}
 	}
 
@@ -164,7 +236,9 @@ void Application::Display(void)
 	ClearScreen();
 
 	//display octree
-	m_pRoot->Display();
+	if (m_bDisplayOctree) {
+		m_pRoot->Display();
+	}
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");

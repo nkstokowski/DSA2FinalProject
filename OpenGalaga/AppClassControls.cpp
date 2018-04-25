@@ -172,6 +172,14 @@ void Application::ProcessKeyReleased(sf::Event a_event)
 		GenMines(1000);
 		break;
 
+	case sf::Keyboard::V:
+		m_bDisplayOctree = !m_bDisplayOctree;
+		break;
+
+	case sf::Keyboard::B:
+		ExplodeAllMines();
+		break;
+
 	case sf::Keyboard::LShift:
 	case sf::Keyboard::RShift:
 		m_bModifier = false;

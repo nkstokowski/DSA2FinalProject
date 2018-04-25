@@ -6,6 +6,7 @@ Date: 2017/06
 #define __APPLICATIONCLASS_H_
 
 #include "Definitions.h"
+#include <cstdlib>
 #include <string>
 
 #include "ControllerConfiguration.h"
@@ -30,9 +31,8 @@ namespace Simplex
 		uint m_uOctantLevels = 0; //Number of levels in the octree
 		uint m_uOctantIdealCount = 5; //Target number of objects in octant
 
-		vector3 m_v3Sub = vector3(0.0f); //position of the Submarine
+		vector3 m_v3Sub = vector3(0.0f, 50.0f, 0.0f); //position of the Submarine
 		
-
 		vector<uint> m_lToDelete;
 
 		// Player stuff
@@ -40,11 +40,21 @@ namespace Simplex
 
 		// Torpedo stuff
 		string m_sTorpedoObjLoc = "Submarine\\torpedo.obj";
+		float m_uTorpedoLife = 10.0f;
 		vector<uint> m_lTorpedoList;
 
 		// Mine stuff
 		uint m_uMineCount = 0;
 		vector<uint> m_lMineList;
+
+		// Shrapnel stuff
+		uint m_uMinShrapnel = 3;
+		uint m_uMaxShrapnel = 10;
+		float m_uShrapnelLife = 20.0f;
+		vector<uint> m_lShrapnelList;
+
+		// Octree stuff
+		bool m_bDisplayOctree = false;
 
 		quaternion m_qSub; //quaternion for the sub
 		quaternion m_qTorpedo; //quaternion for the torpedo
@@ -94,6 +104,7 @@ namespace Simplex
 
 	public:
 
+#pragma region Sub and Mine functions
 		/*
 		* Fires a single torpedo based on player location
 		*/
@@ -103,6 +114,18 @@ namespace Simplex
 		* Generates a specified amount of mines in a sphere around the player
 		*/
 		void GenMines(uint a_uAmount);
+
+		/*
+		* Destroy a specific mine by index
+		*/
+		void ExplodeMine(uint a_uMineIndex);
+
+		/*
+		* Destroy all mines
+		*/
+		void ExplodeAllMines(void);
+
+#pragma endregion
 
 #pragma region Constructor / Run / Destructor
 		/*
