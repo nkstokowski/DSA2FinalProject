@@ -34,6 +34,8 @@ void Application::GenMines(uint amount) {
 
 		m4Model = glm::translate(v3Position) *  glm::rotate(IDENTITY_M4, -55.0f, AXIS_Z);
 
+		
+
 		m_pEntityMngr->SetModelMatrix(m4Model);
 		s_id = m_pEntityMngr->GetUniqueID();
 		u_id = m_pEntityMngr->GetEntityIndex(s_id);
@@ -168,6 +170,11 @@ void Application::Display(void)
 
 	// draw a skybox
 	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");
+
+	//draw ground
+	matrix4 groundMat = glm::rotate(IDENTITY_M4, -90.0f, vector3(90, 0, 0));
+	groundMat = glm::scale(groundMat, vector3(1000, 1000, 1));
+	m_pMeshMngr->AddPlaneToRenderList(groundMat, vector3(0.59f, 0.6f, 0.52f));
 
 	//render list call
 	m_uRenderCallCount = m_pMeshMngr->Render();
