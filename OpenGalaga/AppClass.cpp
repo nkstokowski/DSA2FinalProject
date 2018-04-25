@@ -12,7 +12,7 @@ void Application::FireTorpedo() {
 	// User player matrix to set new torpedo matrix
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
 
-	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, 0.0f, 5.0f)), u_id);
+	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -3.0f, 5.0f)), u_id);
 	//m_pEntityMngr->UsePhysicsSolver();
 
 	// Add torpedo index to torpedo list
