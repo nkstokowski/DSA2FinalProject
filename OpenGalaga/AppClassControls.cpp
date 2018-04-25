@@ -386,9 +386,30 @@ void Application::CameraRotation(float a_fSpeed)
 		fDeltaMouse = static_cast<float>(MouseY - CenterY);
 		fAngleX += fDeltaMouse * a_fSpeed;
 	}
+	static float yRot = 0;
+	static float xRot = 0;
+	
+	yRot += fAngleX / 5.0f;
+	xRot -= fAngleY / 5.0f;
+
+	if (yRot >= PI / 2.0f) {
+		yRot = PI / 2.0f - .01f;
+	}
+	else if (yRot <= -PI / 2.0f) {
+		yRot = -PI / 2.0f + .01f;
+	}
+
+	float x = glm::cos(yRot) * glm::cos(xRot);
+	float y = glm::cos(yRot) * glm::sin(xRot);
+	float z = glm::sin(yRot);
+
+	m_pCameraMngr->SetPosition(glm::vec3(
+		x * 10.0f + m_v3Sub.x,
+		z * 10.0f + m_v3Sub.y,
+		y * 10.0f + m_v3Sub.z));
 	//Change the Yaw and the Pitch of the camera
-	m_pCameraMngr->ChangeYaw(fAngleY * 3.0f);
-	m_pCameraMngr->ChangePitch(-fAngleX * 3.0f);
+	//m_pCameraMngr->ChangeYaw(fAngleY * 3.0f);
+	//m_pCameraMngr->ChangePitch(-fAngleX * 3.0f);
 	SetCursorPos(CenterX, CenterY);//Position the mouse in the center
 }
 //Keyboard
@@ -409,11 +430,23 @@ void Application::ProcessKeyboard(void)
 	if (bMultiplier)
 		fMultiplier = 5.0f;
 
+	vector3 m_v3Direction = glm::normalize(
+		m_v3Sub - m_pCameraMngr->GetPosition()
+	);
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_pCameraMngr->MoveForward(m_fMovementSpeed * fMultiplier);
+		m_v3Sub = m_v3Sub + glm::vec3(
+			m_v3Direction.x * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.z * m_fMovementSpeed * fMultiplier
+		);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_pCameraMngr->MoveForward(-m_fMovementSpeed * fMultiplier);
+		m_v3Sub = m_v3Sub - glm::vec3(
+			m_v3Direction.x * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.y * m_fMovementSpeed * fMultiplier,
+			m_v3Direction.z * m_fMovementSpeed * fMultiplier
+		);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		m_pCameraMngr->MoveSideways(-m_fMovementSpeed * fMultiplier);
@@ -428,7 +461,7 @@ void Application::ProcessKeyboard(void)
 		m_pCameraMngr->MoveVertical(m_fMovementSpeed * fMultiplier);
 #pragma endregion
 	//move the sub
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		m_v3Sub.x -= 0.1f;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -439,7 +472,7 @@ void Application::ProcessKeyboard(void)
 		if (m_bModifier)
 			m_v3Sub.z -= 0.1f;
 		else
-			m_v3Sub.y += 0.1f;
+			m_v3Sub.z += 0.1f;
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
@@ -447,11 +480,13 @@ void Application::ProcessKeyboard(void)
 		if (m_bModifier)
 			m_v3Sub.z += 0.1f;
 		else
-			m_v3Sub.y -= 0.1f;
-	}
+			m_v3Sub.z -= 0.1f;
+	}*/
 
 	//Orient the sub
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+
+
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
 		if (m_bModifier)
 			m_qSub = m_qSub * glm::angleAxis(1.0f, AXIS_X);
@@ -475,7 +510,7 @@ void Application::ProcessKeyboard(void)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
 	{
 		m_qSub = quaternion();
-	}
+	}*/
 }
 //Joystick
 void Application::ProcessJoystick(void)

@@ -10,6 +10,7 @@ void Application::fireTorpedo() {
 
 	// User player matrix to set new torpedo matrix
 	matrix4 playerMat = m_pEntityMngr->GetModelMatrix(m_uPlayerId);
+
 	m_pEntityMngr->SetModelMatrix(playerMat * glm::translate(vector3(0.0f, -2.0f, 5.0f)), u_id);
 
 	// Add torpedo index to torpedo list
@@ -53,6 +54,7 @@ void Application::Update(void)
 	CameraRotation();
 
 	// Move Submarine
+	m_pCameraMngr->SetTarget(m_v3Sub);
 	matrix4 m4Sub = glm::translate(m_v3Sub) * ToMatrix4(m_qSub) * ToMatrix4(m_qArcBall);
 	m_pEntityMngr->SetModelMatrix(m4Sub, m_uPlayerId);
 
