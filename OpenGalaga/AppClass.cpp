@@ -246,7 +246,8 @@ void Application::Display(void)
 	m_pMeshMngr->AddSkyboxToRenderList("Water.jpg");
 
 	//draw ground
-	matrix4 groundMat = glm::rotate(IDENTITY_M4, -90.0f, vector3(90, 0, 0));
+	matrix4 groundMat = glm::translate(IDENTITY_M4, vector3(0.0f, -0.6f, 0.0f));
+	groundMat = glm::rotate(groundMat, -90.0f, vector3(90, 0, 0));
 	groundMat = glm::scale(groundMat, vector3(1000, 1000, 1));
 	m_pMeshMngr->AddPlaneToRenderList(groundMat, vector3(0.59f, 0.6f, 0.52f));
 
