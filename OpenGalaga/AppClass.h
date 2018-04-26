@@ -27,7 +27,7 @@ namespace Simplex
 		Octree* m_pRoot = nullptr;
 
 		uint m_uOctantID = -1; //Index of Octant to display
-		uint m_uObjects = 0; //Number of objects in the scene
+		uint m_uObjects = 1; //Number of objects in the scene
 		uint m_uOctantLevels = 0; //Number of levels in the octree
 		uint m_uOctantIdealCount = 5; //Target number of objects in octant
 
@@ -40,17 +40,17 @@ namespace Simplex
 
 		// Torpedo stuff
 		string m_sTorpedoObjLoc = "Submarine\\torpedo.obj";
-		float m_uTorpedoLife = 10.0f;
+		float m_uTorpedoLife = 6.0f;
 		vector<uint> m_lTorpedoList;
 
 		// Mine stuff
-		uint m_uMineCount = 0;
+		uint m_uMinesShot = 0;
 		vector<uint> m_lMineList;
 
 		// Shrapnel stuff
 		uint m_uMinShrapnel = 3;
 		uint m_uMaxShrapnel = 10;
-		float m_uShrapnelLife = 20.0f;
+		float m_uShrapnelLife = 15.0f;
 		vector<uint> m_lShrapnelList;
 
 		// Octree stuff
@@ -65,7 +65,7 @@ namespace Simplex
 		MyRigidBody* m_pMineRB = nullptr; //Rigid Body of the model
 
 	private:
-		String m_sProgrammer = "Nick, Nick and Noah"; //programmer
+		String m_sProgrammer = "Nick B, Nick S, and Noah W"; //programmer
 
 		static ImGuiObject gui; //GUI object
 		bool m_bGUI_Main = true; //show Main GUI window?
