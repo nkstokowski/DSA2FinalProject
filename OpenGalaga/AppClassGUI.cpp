@@ -46,6 +46,7 @@ void Application::DrawGUI(void)
 			ImGui::Text("   WASD: Movement\n");
 			ImGui::Text("  Mouse: Rotate Camera\n");
 			ImGui::Text("  Space OR Mouse1: Fire Missile\n");
+			ImGui::Text("  Shift: Maximum Overdrive\n");
 			ImGui::Separator();
 			ImGui::Text("	V: Set Octree Visibility\n");
 			ImGui::Text(" PageUp: Increment Octant display\n");
