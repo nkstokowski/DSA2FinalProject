@@ -18,6 +18,8 @@ void Application::FireTorpedo() {
 	// Add torpedo index to torpedo list
 	m_lTorpedoList.push_back(u_id);
 
+	m_uObjects++;
+
 }
 
 void Application::GenMines(uint amount) {
@@ -27,7 +29,7 @@ void Application::GenMines(uint amount) {
 	vector3 v3Position;
 	matrix4 m4Model;
 
-	for (uint i = 0; i <= amount; i++) {
+	for (uint i = 0; i < amount; i++) {
 		m_pEntityMngr->AddEntity("Submarine\\mine.obj", "mine", "Mine");
 		
 		v3Position = vector3(glm::sphericalRand(50.0f));
@@ -42,6 +44,7 @@ void Application::GenMines(uint amount) {
 		u_id = m_pEntityMngr->GetEntityIndex(s_id);
 		m_pEntityMngr->SetName("mine");
 		m_lMineList.push_back(u_id);
+		m_uObjects++;
 	}
 
 }
@@ -83,6 +86,7 @@ void Simplex::Application::ExplodeMine(uint a_uMineIndex)
 		y = rand() % 360;
 		z = rand() % 360;
 		m_pEntityMngr->ApplyForce(vector3(x, y, z));
+		m_uObjects++;
 	}
 }
 
@@ -98,7 +102,7 @@ void Simplex::Application::ExplodeAllMines(void)
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Nick, Nick, and Noah";
+	m_sProgrammer = "Nick B, Nick S, and Noah W";
 
 	// Seed random
 	srand(time(NULL));
@@ -157,7 +161,16 @@ void Application::Update(void)
 
 			for (uint x = 0; x < uCollisionCount; x++) {
 				sOtherTag = lCollisions[x]->GetTag();
-				if (sOtherTag != "Player" && sOtherTag != "Mine") {
+				if (sOtherTag != "Mine") {
+
+					if(sOtherTag == "Player"){
+						m_uMinesShot = 0;
+					}
+
+					if (sOtherTag == "Torpedo") {
+						m_uMinesShot++;
+					}
+
 					bShouldDestroy = true;
 					ExplodeMine(i);
 					lCollisions[x]->SetTag("Destroy");
@@ -201,6 +214,7 @@ void Application::Update(void)
 	// Remove entities marked for deletion
 	for (uint i = 0; i < m_lToDelete.size(); i++) {
 		m_pEntityMngr->RemoveEntity(m_lToDelete[i]);
+		m_uObjects--;
 	}
 
 	// Rebuild Lists
